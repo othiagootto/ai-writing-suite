@@ -28,7 +28,7 @@ Clone do JustDone.com - Plataforma SaaS completa de escrita com IA que combina d
 
 - [x] Ideia capturada
 - [x] SPEC (Segunda)
-- [ ] REVIEW (Terca)
+- [x] REVIEW (Terca)
 - [ ] FORGE (Quarta-Quinta)
 - [ ] POLISH (Sexta)
 - [ ] PUBLISH (Sabado)

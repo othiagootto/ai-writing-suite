@@ -134,7 +134,7 @@
 
 ## Decisao
 
-- [x] **AJUSTAR** - Cortar escopo conforme recomendacoes acima antes de iniciar forge
+- [x] **APROVADO** - Pronto para forge (decisao humana: manter todas 8 ferramentas, aceitar risco de timeline estendida)
 
 ---
 
