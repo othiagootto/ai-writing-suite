@@ -2,9 +2,21 @@ import type { ToolType } from '@/types';
 
 export const FREE_DAILY_LIMIT = 3;
 
-export const TOOLS = [
+export const TOOLS: readonly {
+  id: ToolType;
+  nameKey: string;
+  descriptionKey: string;
+  name: string;
+  description: string;
+  icon: string;
+  path: string;
+  active: boolean;
+  color: string;
+}[] = [
   {
     id: 'detector' as ToolType,
+    nameKey: 'tools.detector.name',
+    descriptionKey: 'tools.detector.description',
     name: 'AI Detector',
     description: 'Analyze text to determine if it was written by AI',
     icon: 'ScanSearch',
@@ -14,6 +26,8 @@ export const TOOLS = [
   },
   {
     id: 'humanizer' as ToolType,
+    nameKey: 'tools.humanizer.name',
+    descriptionKey: 'tools.humanizer.description',
     name: 'AI Humanizer',
     description: 'Rewrite AI-generated text to sound naturally human',
     icon: 'UserPen',
@@ -23,6 +37,8 @@ export const TOOLS = [
   },
   {
     id: 'paraphraser' as ToolType,
+    nameKey: 'tools.paraphraser.name',
+    descriptionKey: 'tools.paraphraser.description',
     name: 'Paraphraser',
     description: 'Rewrite text with different tone and intensity',
     icon: 'RefreshCw',
@@ -32,6 +48,8 @@ export const TOOLS = [
   },
   {
     id: 'grammar' as ToolType,
+    nameKey: 'tools.grammar.name',
+    descriptionKey: 'tools.grammar.description',
     name: 'Grammar Checker',
     description: 'Find and fix grammar, spelling, and style errors',
     icon: 'SpellCheck',
@@ -41,6 +59,8 @@ export const TOOLS = [
   },
   {
     id: 'plagiarism' as ToolType,
+    nameKey: 'tools.plagiarism.name',
+    descriptionKey: 'tools.plagiarism.description',
     name: 'Plagiarism Checker',
     description: 'Analyze text originality and detect potential plagiarism',
     icon: 'ShieldCheck',
@@ -50,6 +70,8 @@ export const TOOLS = [
   },
   {
     id: 'summarizer' as ToolType,
+    nameKey: 'tools.summarizer.name',
+    descriptionKey: 'tools.summarizer.description',
     name: 'Summarizer',
     description: 'Condense long texts into concise summaries',
     icon: 'FileText',
@@ -59,6 +81,8 @@ export const TOOLS = [
   },
   {
     id: 'citation' as ToolType,
+    nameKey: 'tools.citation.name',
+    descriptionKey: 'tools.citation.description',
     name: 'Citation Generator',
     description: 'Generate citations in APA, MLA, Chicago, and Harvard',
     icon: 'Quote',
@@ -68,6 +92,8 @@ export const TOOLS = [
   },
   {
     id: 'chat' as ToolType,
+    nameKey: 'tools.chat.name',
+    descriptionKey: 'tools.chat.description',
     name: 'AI Chat',
     description: 'Chat with AI about your documents and writing',
     icon: 'MessageSquare',
@@ -75,7 +101,7 @@ export const TOOLS = [
     active: true,
     color: 'text-pink-500',
   },
-] as const;
+];
 
 export const PRICING_PLANS = [
   {

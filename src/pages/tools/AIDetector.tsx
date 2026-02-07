@@ -9,11 +9,13 @@ import LoadingSpinner from '@/components/shared/LoadingSpinner';
 import UsageBadge from '@/components/shared/UsageBadge';
 import UpgradeModal from '@/components/shared/UpgradeModal';
 import { useTool } from '@/hooks/useTool';
+import { useTranslation } from '@/hooks/useTranslation';
 import { MAX_INPUT_CHARS } from '@/lib/constants';
 import { AlertCircle, ArrowRight } from 'lucide-react';
 import { toast } from 'sonner';
 
 export default function AIDetector() {
+  const { t } = useTranslation();
   const [text, setText] = useState('');
   const [showUpgrade, setShowUpgrade] = useState(false);
   const { result, isLoading, error, execute, canUse, remaining } = useTool('detector');
@@ -27,7 +29,7 @@ export default function AIDetector() {
 
   const handleAnalyze = async () => {
     if (!text.trim()) {
-      toast.error('Please enter some text to analyze');
+      toast.error(t('detector.enterText'));
       return;
     }
 
@@ -49,7 +51,7 @@ export default function AIDetector() {
       <TextInput
         value={text}
         onChange={setText}
-        placeholder="Paste your text here to check if it was written by AI..."
+        placeholder={t('detector.placeholder')}
         maxLength={MAX_INPUT_CHARS}
       />
       <Button
@@ -58,7 +60,7 @@ export default function AIDetector() {
         className="w-full bg-primary hover:bg-primary/90"
         size="lg"
       >
-        Analyze Text
+        {t('detector.analyze')}
       </Button>
     </div>
   );
@@ -69,7 +71,7 @@ export default function AIDetector() {
         <div className="rounded-lg border border-border bg-card p-6">
           <LoadingSpinner />
           <p className="text-center text-sm text-muted-foreground mt-4">
-            Analyzing text for AI patterns...
+            {t('detector.analyzing')}
           </p>
         </div>
       )}
@@ -79,7 +81,7 @@ export default function AIDetector() {
           <div className="flex items-start gap-3">
             <AlertCircle className="h-5 w-5 text-destructive mt-0.5 flex-shrink-0" />
             <div className="flex-1">
-              <h3 className="font-semibold text-destructive mb-1">Error</h3>
+              <h3 className="font-semibold text-destructive mb-1">{t('common.error')}</h3>
               <p className="text-sm text-destructive">{error}</p>
             </div>
           </div>
@@ -89,7 +91,7 @@ export default function AIDetector() {
       {!isLoading && !error && !result && (
         <div className="rounded-lg border border-border bg-muted p-12">
           <div className="text-center text-muted-foreground">
-            <p className="text-sm">Analysis results will appear here</p>
+            <p className="text-sm">{t('detector.emptyResult')}</p>
           </div>
         </div>
       )}
@@ -98,17 +100,17 @@ export default function AIDetector() {
         <div className="space-y-6">
           <ScoreDisplay
             score={result.score || 0}
-            label="AI Detection Score"
+            label={t('detector.scoreLabel')}
             type="ai-detection"
           />
 
           <div className="rounded-lg border border-border bg-card p-6">
-            <h3 className="font-semibold mb-3">Summary</h3>
+            <h3 className="font-semibold mb-3">{t('detector.summary')}</h3>
             <p className="text-foreground leading-relaxed mb-4">{result.result}</p>
 
             {result.highlights && result.highlights.length > 0 && (
               <div className="space-y-3 mt-6">
-                <h4 className="font-semibold text-sm">Detected Patterns</h4>
+                <h4 className="font-semibold text-sm">{t('detector.patterns')}</h4>
                 {result.highlights.map((highlight, idx) => (
                   <div key={idx} className="flex items-start gap-2 text-sm">
                     <Badge variant="outline" className="mt-0.5">
@@ -128,7 +130,7 @@ export default function AIDetector() {
               className="w-full"
               size="lg"
             >
-              Humanize This Text
+              {t('detector.humanize')}
               <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
           )}
@@ -140,8 +142,8 @@ export default function AIDetector() {
   return (
     <>
       <ToolLayout
-        title="AI Detector"
-        description="Analyze text to determine if it was written by AI"
+        title={t('tools.detector.name')}
+        description={t('tools.detector.description')}
         icon="ScanSearch"
         inputPanel={inputPanel}
         outputPanel={outputPanel}

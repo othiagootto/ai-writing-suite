@@ -4,12 +4,14 @@ import { Textarea } from '@/components/ui/textarea';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Avatar } from '@/components/ui/avatar';
 import { useChatStore } from '@/stores/chatStore';
+import { useTranslation } from '@/hooks/useTranslation';
 import { supabase } from '@/services/supabase';
 import { Send, Upload, Trash2, User, Bot } from 'lucide-react';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 
 export default function AIChat() {
+  const { t } = useTranslation();
   const [input, setInput] = useState('');
   const { messages, isLoading, addMessage, setLoading, clearMessages } = useChatStore();
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -40,11 +42,11 @@ export default function AIChat() {
         addMessage({ role: 'assistant', content: data.response });
       }
     } catch (err) {
-      const message = err instanceof Error ? err.message : 'Failed to get response';
+      const message = err instanceof Error ? err.message : t('chat.failedResponse');
       toast.error(message);
       addMessage({
         role: 'assistant',
-        content: 'Sorry, I encountered an error. Please try again.',
+        content: t('chat.errorResponse'),
       });
     } finally {
       setLoading(false);
@@ -59,14 +61,14 @@ export default function AIChat() {
   };
 
   const handleFileUpload = () => {
-    toast.info('File upload coming soon!');
+    toast.info(t('chat.fileUploadSoon'));
   };
 
   const handleClear = () => {
     if (messages.length === 0) return;
-    if (confirm('Are you sure you want to clear all messages?')) {
+    if (confirm(t('chat.clearConfirm'))) {
       clearMessages();
-      toast.success('Chat cleared');
+      toast.success(t('chat.cleared'));
     }
   };
 
@@ -80,8 +82,8 @@ export default function AIChat() {
               <Bot className="h-5 w-5 text-white" />
             </div>
             <div>
-              <h1 className="text-xl font-bold text-foreground">AI Chat Assistant</h1>
-              <p className="text-sm text-muted-foreground">Ask me anything about writing</p>
+              <h1 className="text-xl font-bold text-foreground">{t('chat.title')}</h1>
+              <p className="text-sm text-muted-foreground">{t('chat.subtitle')}</p>
             </div>
           </div>
           <div className="flex items-center gap-2">
@@ -92,7 +94,7 @@ export default function AIChat() {
               disabled
             >
               <Upload className="h-4 w-4 mr-2" />
-              Upload
+              {t('common.upload')}
             </Button>
             <Button
               variant="outline"
@@ -101,7 +103,7 @@ export default function AIChat() {
               disabled={messages.length === 0}
             >
               <Trash2 className="h-4 w-4 mr-2" />
-              Clear
+              {t('common.clear')}
             </Button>
           </div>
         </div>
@@ -117,17 +119,17 @@ export default function AIChat() {
                   <Bot className="h-8 w-8 text-purple-600 dark:text-purple-400" />
                 </div>
                 <h2 className="text-xl font-semibold text-foreground mb-2">
-                  How can I help you today?
+                  {t('chat.emptyTitle')}
                 </h2>
                 <p className="text-muted-foreground mb-6">
-                  I can help you with writing, editing, brainstorming, and more.
+                  {t('chat.emptySubtitle')}
                 </p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-2xl mx-auto">
                   {[
-                    'Help me brainstorm essay topics',
-                    'Check my grammar and style',
-                    'Explain the difference between APA and MLA',
-                    'Give me tips for better writing',
+                    t('chat.prompt1'),
+                    t('chat.prompt2'),
+                    t('chat.prompt3'),
+                    t('chat.prompt4'),
                   ].map((prompt, idx) => (
                     <button
                       key={idx}
@@ -211,7 +213,7 @@ export default function AIChat() {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={handleKeyDown}
-              placeholder="Type your message... (Shift+Enter for new line)"
+              placeholder={t('chat.placeholder')}
               className="min-h-[60px] max-h-[200px] resize-none"
               disabled={isLoading}
             />

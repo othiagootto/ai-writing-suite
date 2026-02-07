@@ -7,8 +7,10 @@ import { getUsageHistory } from '@/services/tools';
 import { TOOLS } from '@/lib/constants';
 import { FileText, Calendar } from 'lucide-react';
 import LoadingSpinner from '@/components/shared/LoadingSpinner';
+import { useTranslation } from '@/hooks/useTranslation';
 
 export default function History() {
+  const { t } = useTranslation();
   const { user } = useUser();
 
   const { data: history, isLoading } = useQuery({
@@ -34,8 +36,8 @@ export default function History() {
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-foreground mb-2">History</h1>
-          <p className="text-muted-foreground">View your recent tool usage</p>
+          <h1 className="text-3xl font-bold text-foreground mb-2">{t('history.title')}</h1>
+          <p className="text-muted-foreground">{t('history.subtitle')}</p>
         </div>
 
         {/* History List */}
@@ -47,10 +49,10 @@ export default function History() {
                   <FileText className="h-8 w-8 text-muted-foreground" />
                 </div>
                 <h3 className="text-lg font-semibold text-foreground mb-2">
-                  No history yet
+                  {t('history.empty.title')}
                 </h3>
                 <p className="text-muted-foreground">
-                  Start using a tool to see your history here
+                  {t('history.empty.subtitle')}
                 </p>
               </div>
             </CardContent>
@@ -69,7 +71,7 @@ export default function History() {
                         <div className="flex-1">
                           <div className="flex items-center gap-2 mb-2">
                             <Badge variant="outline" className={tool?.color}>
-                              {tool?.name || entry.tool}
+                              {t(tool?.nameKey || '') || tool?.name || entry.tool}
                             </Badge>
                             <span className="text-xs text-muted-foreground flex items-center gap-1">
                               <Calendar className="h-3 w-3" />
@@ -80,19 +82,19 @@ export default function History() {
                           <div className="space-y-3">
                             <div>
                               <h4 className="text-sm font-medium text-foreground mb-1">
-                                Input
+                                {t('history.input')}
                               </h4>
                               <p className="text-sm text-muted-foreground line-clamp-2">
-                                {entry.input || 'No input recorded'}
+                                {entry.input || t('history.noInput')}
                               </p>
                             </div>
 
                             <div>
                               <h4 className="text-sm font-medium text-foreground mb-1">
-                                Output
+                                {t('history.output')}
                               </h4>
                               <p className="text-sm text-muted-foreground line-clamp-2">
-                                {entry.output || 'No output recorded'}
+                                {entry.output || t('history.noOutput')}
                               </p>
                             </div>
                           </div>
@@ -100,9 +102,9 @@ export default function History() {
                           {entry.metadata && (
                             <div className="mt-3 pt-3 border-t border-border">
                               <div className="flex items-center gap-4 text-xs text-muted-foreground">
-                                <span>Provider: {entry.metadata.provider}</span>
-                                <span>Tokens: {entry.metadata.tokensUsed}</span>
-                                <span>Time: {entry.metadata.processingTime}ms</span>
+                                <span>{t('history.provider')}: {entry.metadata.provider}</span>
+                                <span>{t('history.tokens')}: {entry.metadata.tokensUsed}</span>
+                                <span>{t('history.time')}: {entry.metadata.processingTime}ms</span>
                               </div>
                             </div>
                           )}

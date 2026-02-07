@@ -9,6 +9,7 @@ import {
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Sparkles } from 'lucide-react';
+import { useTranslation } from '@/hooks/useTranslation';
 
 interface UpgradeModalProps {
   open: boolean;
@@ -17,6 +18,7 @@ interface UpgradeModalProps {
 
 export default function UpgradeModal({ open, onOpenChange }: UpgradeModalProps) {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -26,10 +28,10 @@ export default function UpgradeModal({ open, onOpenChange }: UpgradeModalProps) 
             <Sparkles className="w-6 h-6 text-background" />
           </div>
           <DialogTitle className="text-center text-xl">
-            You've reached your daily limit
+            {t('upgrade.title')}
           </DialogTitle>
           <DialogDescription className="text-center">
-            Upgrade to Pro for unlimited access to all writing tools and premium features.
+            {t('upgrade.subtitle')}
           </DialogDescription>
         </DialogHeader>
         <DialogFooter className="flex-col sm:flex-col gap-2">
@@ -40,14 +42,14 @@ export default function UpgradeModal({ open, onOpenChange }: UpgradeModalProps) 
             }}
             className="w-full"
           >
-            See Plans
+            {t('common.seePlans')}
           </Button>
           <Button
             variant="outline"
             onClick={() => onOpenChange(false)}
             className="w-full"
           >
-            Maybe Later
+            {t('common.maybeLater')}
           </Button>
         </DialogFooter>
       </DialogContent>

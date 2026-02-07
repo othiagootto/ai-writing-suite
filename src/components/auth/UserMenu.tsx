@@ -13,18 +13,20 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { useUser } from '@/hooks/useUser';
 import { signOut } from '@/services/auth';
 import { toast } from 'sonner';
+import { useTranslation } from '@/hooks/useTranslation';
 
 export default function UserMenu() {
   const { user, profile } = useUser();
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const handleSignOut = async () => {
     try {
       await signOut();
-      toast.success('Signed out successfully');
+      toast.success(t('account.signedOut'));
       navigate('/');
     } catch (error) {
-      toast.error('Failed to sign out');
+      toast.error(t('account.signOutError'));
     }
   };
 
@@ -59,16 +61,16 @@ export default function UserMenu() {
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={() => navigate('/dashboard')}>
           <LayoutDashboard className="mr-2 h-4 w-4" />
-          Dashboard
+          {t('common.dashboard')}
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => navigate('/account')}>
           <UserIcon className="mr-2 h-4 w-4" />
-          Account
+          {t('common.account')}
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={handleSignOut}>
           <LogOut className="mr-2 h-4 w-4" />
-          Sign Out
+          {t('common.signOut')}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

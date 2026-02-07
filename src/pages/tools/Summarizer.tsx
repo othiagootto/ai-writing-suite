@@ -9,11 +9,13 @@ import ResultPanel from '@/components/tools/ResultPanel';
 import UsageBadge from '@/components/shared/UsageBadge';
 import UpgradeModal from '@/components/shared/UpgradeModal';
 import { useTool } from '@/hooks/useTool';
+import { useTranslation } from '@/hooks/useTranslation';
 import { MAX_INPUT_CHARS, SUMMARY_LENGTHS } from '@/lib/constants';
 import type { SummaryLength } from '@/types';
 import { toast } from 'sonner';
 
 export default function Summarizer() {
+  const { t } = useTranslation();
   const [text, setText] = useState('');
   const [length, setLength] = useState<SummaryLength>('medium');
   const [showUpgrade, setShowUpgrade] = useState(false);
@@ -27,7 +29,7 @@ export default function Summarizer() {
 
   const handleSummarize = async () => {
     if (!text.trim()) {
-      toast.error('Please enter some text to summarize');
+      toast.error(t('summarizer.enterText'));
       return;
     }
 
@@ -45,11 +47,11 @@ export default function Summarizer() {
       <TextInput
         value={text}
         onChange={setText}
-        placeholder="Paste your long text here to get a concise summary..."
+        placeholder={t('summarizer.placeholder')}
         maxLength={MAX_INPUT_CHARS}
       />
       <div className="space-y-3">
-        <Label className="text-sm font-semibold">Summary Length</Label>
+        <Label className="text-sm font-semibold">{t('summarizer.lengthLabel')}</Label>
         <ToggleGroup
           type="single"
           value={length}
@@ -62,8 +64,8 @@ export default function Summarizer() {
               value={len.id}
               className="flex flex-col items-center h-auto p-3 data-[state=on]:bg-primary data-[state=on]:text-primary-foreground"
             >
-              <span className="font-medium text-sm">{len.label}</span>
-              <span className="text-xs opacity-70 mt-1">{len.description}</span>
+              <span className="font-medium text-sm">{t(`summarizer.length.${len.id}.label`)}</span>
+              <span className="text-xs opacity-70 mt-1">{t(`summarizer.length.${len.id}.desc`)}</span>
             </ToggleGroupItem>
           ))}
         </ToggleGroup>
@@ -74,7 +76,7 @@ export default function Summarizer() {
         className="w-full bg-primary hover:bg-primary/90"
         size="lg"
       >
-        Summarize Text
+        {t('summarizer.submit')}
       </Button>
     </div>
   );
@@ -91,7 +93,7 @@ export default function Summarizer() {
         <>
           {result.highlights && result.highlights.length > 0 && (
             <div className="rounded-lg border border-border bg-card p-6">
-              <h3 className="font-semibold mb-4">Key Points</h3>
+              <h3 className="font-semibold mb-4">{t('summarizer.keyPoints')}</h3>
               <ul className="space-y-2">
                 {result.highlights.map((highlight, idx) => (
                   <li key={idx} className="flex items-start gap-3">
@@ -109,11 +111,11 @@ export default function Summarizer() {
           {result.score !== undefined && (
             <div className="rounded-lg border border-border bg-card p-4">
               <div className="flex items-center justify-between">
-                <span className="text-sm font-medium text-foreground">Compression Ratio</span>
+                <span className="text-sm font-medium text-foreground">{t('summarizer.compressionRatio')}</span>
                 <Badge variant="outline">{Math.round(result.score)}%</Badge>
               </div>
               <p className="text-xs text-muted-foreground mt-2">
-                Summary is {Math.round(result.score)}% of original length
+                {t('summarizer.compressionDesc', { score: Math.round(result.score) })}
               </p>
             </div>
           )}
@@ -125,8 +127,8 @@ export default function Summarizer() {
   return (
     <>
       <ToolLayout
-        title="Summarizer"
-        description="Condense long texts into concise summaries"
+        title={t('tools.summarizer.name')}
+        description={t('tools.summarizer.description')}
         icon="FileText"
         inputPanel={inputPanel}
         outputPanel={outputPanel}

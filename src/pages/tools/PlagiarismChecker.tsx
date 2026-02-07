@@ -7,11 +7,13 @@ import LoadingSpinner from '@/components/shared/LoadingSpinner';
 import UsageBadge from '@/components/shared/UsageBadge';
 import UpgradeModal from '@/components/shared/UpgradeModal';
 import { useTool } from '@/hooks/useTool';
+import { useTranslation } from '@/hooks/useTranslation';
 import { MAX_INPUT_CHARS } from '@/lib/constants';
 import { AlertCircle, Info } from 'lucide-react';
 import { toast } from 'sonner';
 
 export default function PlagiarismChecker() {
+  const { t } = useTranslation();
   const [text, setText] = useState('');
   const [showUpgrade, setShowUpgrade] = useState(false);
   const { result, isLoading, error, execute, canUse, remaining } = useTool('plagiarism');
@@ -24,7 +26,7 @@ export default function PlagiarismChecker() {
 
   const handleCheck = async () => {
     if (!text.trim()) {
-      toast.error('Please enter some text to check');
+      toast.error(t('plagiarism.enterText'));
       return;
     }
 
@@ -43,10 +45,9 @@ export default function PlagiarismChecker() {
         <div className="flex items-start gap-3">
           <Info className="h-5 w-5 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
           <div className="text-sm text-blue-900 dark:text-blue-100">
-            <p className="font-medium mb-1">Note: Heuristic Analysis</p>
+            <p className="font-medium mb-1">{t('plagiarism.note.title')}</p>
             <p className="text-blue-700 dark:text-blue-400">
-              This tool uses AI-powered pattern analysis to estimate originality.
-              For academic submissions, please use a dedicated plagiarism database service.
+              {t('plagiarism.note.desc')}
             </p>
           </div>
         </div>
@@ -54,7 +55,7 @@ export default function PlagiarismChecker() {
       <TextInput
         value={text}
         onChange={setText}
-        placeholder="Paste your text here to check for potential plagiarism..."
+        placeholder={t('plagiarism.placeholder')}
         maxLength={MAX_INPUT_CHARS}
       />
       <Button
@@ -63,7 +64,7 @@ export default function PlagiarismChecker() {
         className="w-full bg-primary hover:bg-primary/90"
         size="lg"
       >
-        Check Originality
+        {t('plagiarism.submit')}
       </Button>
     </div>
   );
@@ -74,7 +75,7 @@ export default function PlagiarismChecker() {
         <div className="rounded-lg border border-border bg-card p-6">
           <LoadingSpinner />
           <p className="text-center text-sm text-muted-foreground mt-4">
-            Analyzing text originality...
+            {t('plagiarism.analyzing')}
           </p>
         </div>
       )}
@@ -84,7 +85,7 @@ export default function PlagiarismChecker() {
           <div className="flex items-start gap-3">
             <AlertCircle className="h-5 w-5 text-destructive mt-0.5 flex-shrink-0" />
             <div className="flex-1">
-              <h3 className="font-semibold text-destructive mb-1">Error</h3>
+              <h3 className="font-semibold text-destructive mb-1">{t('common.error')}</h3>
               <p className="text-sm text-destructive">{error}</p>
             </div>
           </div>
@@ -94,7 +95,7 @@ export default function PlagiarismChecker() {
       {!isLoading && !error && !result && (
         <div className="rounded-lg border border-border bg-muted p-12">
           <div className="text-center text-muted-foreground">
-            <p className="text-sm">Originality report will appear here</p>
+            <p className="text-sm">{t('plagiarism.emptyResult')}</p>
           </div>
         </div>
       )}
@@ -103,18 +104,18 @@ export default function PlagiarismChecker() {
         <div className="space-y-6">
           <ScoreDisplay
             score={result.score || 0}
-            label="Originality Score"
+            label={t('plagiarism.scoreLabel')}
             type="originality"
           />
 
           <div className="rounded-lg border border-border bg-card p-6">
-            <h3 className="font-semibold mb-3">Analysis Summary</h3>
+            <h3 className="font-semibold mb-3">{t('plagiarism.summary')}</h3>
             <p className="text-foreground leading-relaxed">{result.result}</p>
           </div>
 
           {result.highlights && result.highlights.length > 0 && (
             <div className="rounded-lg border border-border bg-card p-6">
-              <h3 className="font-semibold mb-4">Suggestions for Improvement</h3>
+              <h3 className="font-semibold mb-4">{t('plagiarism.suggestions')}</h3>
               <ul className="space-y-3">
                 {result.highlights.map((highlight, idx) => (
                   <li key={idx} className="flex items-start gap-3">
@@ -122,7 +123,7 @@ export default function PlagiarismChecker() {
                       {idx + 1}
                     </span>
                     <span className="text-sm text-foreground leading-relaxed">
-                      {highlight.message || 'Consider rephrasing this section'}
+                      {highlight.message || t('plagiarism.defaultSuggestion')}
                     </span>
                   </li>
                 ))}
@@ -137,8 +138,8 @@ export default function PlagiarismChecker() {
   return (
     <>
       <ToolLayout
-        title="Plagiarism Checker"
-        description="Analyze text originality and detect potential plagiarism"
+        title={t('tools.plagiarism.name')}
+        description={t('tools.plagiarism.description')}
         icon="ShieldCheck"
         inputPanel={inputPanel}
         outputPanel={outputPanel}

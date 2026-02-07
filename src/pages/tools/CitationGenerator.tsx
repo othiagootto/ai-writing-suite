@@ -14,6 +14,7 @@ import ToolLayout from '@/components/tools/ToolLayout';
 import UsageBadge from '@/components/shared/UsageBadge';
 import UpgradeModal from '@/components/shared/UpgradeModal';
 import { useTool } from '@/hooks/useTool';
+import { useTranslation } from '@/hooks/useTranslation';
 import { CITATION_FORMATS } from '@/lib/constants';
 import type { CitationFormat } from '@/types';
 import { toast } from 'sonner';
@@ -28,6 +29,7 @@ interface CitationFormData {
 }
 
 export default function CitationGenerator() {
+  const { t } = useTranslation();
   const [formData, setFormData] = useState<CitationFormData>({
     title: '',
     authors: '',
@@ -48,7 +50,7 @@ export default function CitationGenerator() {
 
   const handleGenerate = async () => {
     if (!formData.title || !formData.authors) {
-      toast.error('Please fill in at least title and authors');
+      toast.error(t('citation.enterTitleAuthors'));
       return;
     }
 
@@ -64,9 +66,9 @@ export default function CitationGenerator() {
   const handleCopy = async (text: string) => {
     try {
       await navigator.clipboard.writeText(text);
-      toast.success('Copied to clipboard');
+      toast.success(t('common.copiedToClipboard'));
     } catch {
-      toast.error('Failed to copy');
+      toast.error(t('common.failedToCopy'));
     }
   };
 
@@ -76,7 +78,7 @@ export default function CitationGenerator() {
 
       <div className="space-y-4">
         <div className="space-y-2">
-          <Label htmlFor="type">Source Type</Label>
+          <Label htmlFor="type">{t('citation.sourceType')}</Label>
           <Select
             value={formData.type}
             onValueChange={(val) => setFormData({ ...formData, type: val as 'book' | 'article' | 'website' })}
@@ -85,56 +87,56 @@ export default function CitationGenerator() {
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="book">Book</SelectItem>
-              <SelectItem value="article">Article</SelectItem>
-              <SelectItem value="website">Website</SelectItem>
+              <SelectItem value="book">{t('citation.sourceBook')}</SelectItem>
+              <SelectItem value="article">{t('citation.sourceArticle')}</SelectItem>
+              <SelectItem value="website">{t('citation.sourceWebsite')}</SelectItem>
             </SelectContent>
           </Select>
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="title">Title *</Label>
+          <Label htmlFor="title">{t('citation.titleLabel')}</Label>
           <Input
             id="title"
             value={formData.title}
             onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-            placeholder="Enter title"
+            placeholder={t('citation.titlePlaceholder')}
           />
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="authors">Author(s) *</Label>
+          <Label htmlFor="authors">{t('citation.authorsLabel')}</Label>
           <Input
             id="authors"
             value={formData.authors}
             onChange={(e) => setFormData({ ...formData, authors: e.target.value })}
-            placeholder="Last, First M. (separate multiple with semicolon)"
+            placeholder={t('citation.authorsPlaceholder')}
           />
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="date">Publication Date</Label>
+          <Label htmlFor="date">{t('citation.dateLabel')}</Label>
           <Input
             id="date"
             type="text"
             value={formData.date}
             onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-            placeholder="YYYY-MM-DD or Year"
+            placeholder={t('citation.datePlaceholder')}
           />
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="publisher">Publisher</Label>
+          <Label htmlFor="publisher">{t('citation.publisherLabel')}</Label>
           <Input
             id="publisher"
             value={formData.publisher}
             onChange={(e) => setFormData({ ...formData, publisher: e.target.value })}
-            placeholder="Publisher name"
+            placeholder={t('citation.publisherPlaceholder')}
           />
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="url">URL</Label>
+          <Label htmlFor="url">{t('citation.urlLabel')}</Label>
           <Input
             id="url"
             type="url"
@@ -146,7 +148,7 @@ export default function CitationGenerator() {
       </div>
 
       <div className="space-y-2">
-        <Label>Citation Format</Label>
+        <Label>{t('citation.formatLabel')}</Label>
         <div className="grid grid-cols-2 gap-2">
           {CITATION_FORMATS.map((fmt) => (
             <Button
@@ -156,8 +158,8 @@ export default function CitationGenerator() {
               onClick={() => setFormat(fmt.id as CitationFormat)}
             >
               <div className="text-left">
-                <div className="font-medium">{fmt.label}</div>
-                <div className="text-xs opacity-70">{fmt.description}</div>
+                <div className="font-medium">{t(`citation.format.${fmt.id}.label`)}</div>
+                <div className="text-xs opacity-70">{t(`citation.format.${fmt.id}.desc`)}</div>
               </div>
             </Button>
           ))}
@@ -170,7 +172,7 @@ export default function CitationGenerator() {
         className="w-full bg-primary hover:bg-primary/90"
         size="lg"
       >
-        Generate Citation
+        {t('citation.submit')}
       </Button>
     </div>
   );
@@ -180,7 +182,7 @@ export default function CitationGenerator() {
       {!result && !isLoading && !error && (
         <div className="rounded-lg border border-border bg-muted p-12">
           <div className="text-center text-muted-foreground">
-            <p className="text-sm">Citations will appear here</p>
+            <p className="text-sm">{t('citation.emptyResult')}</p>
           </div>
         </div>
       )}
@@ -188,7 +190,7 @@ export default function CitationGenerator() {
       {isLoading && (
         <div className="rounded-lg border border-border bg-card p-12">
           <div className="text-center text-muted-foreground">
-            <p className="text-sm">Generating citation...</p>
+            <p className="text-sm">{t('citation.generating')}</p>
           </div>
         </div>
       )}
@@ -203,14 +205,14 @@ export default function CitationGenerator() {
         <div className="space-y-6">
           <div className="rounded-lg border border-border bg-card">
             <div className="border-b border-border px-4 py-3 flex items-center justify-between">
-              <h3 className="font-semibold text-sm">Full Citation</h3>
+              <h3 className="font-semibold text-sm">{t('citation.fullCitation')}</h3>
               <Button
                 onClick={() => handleCopy(result.result)}
                 variant="outline"
                 size="sm"
               >
                 <Copy className="h-4 w-4 mr-2" />
-                Copy
+                {t('common.copy')}
               </Button>
             </div>
             <div className="p-6">
@@ -221,14 +223,14 @@ export default function CitationGenerator() {
           {result.highlights && result.highlights.length > 0 && result.highlights[0].message && (
             <div className="rounded-lg border border-border bg-card">
               <div className="border-b border-border px-4 py-3 flex items-center justify-between">
-                <h3 className="font-semibold text-sm">In-Text Citation</h3>
+                <h3 className="font-semibold text-sm">{t('citation.inTextCitation')}</h3>
                 <Button
                   onClick={() => handleCopy(result.highlights![0].message || '')}
                   variant="outline"
                   size="sm"
                 >
                   <Copy className="h-4 w-4 mr-2" />
-                  Copy
+                  {t('common.copy')}
                 </Button>
               </div>
               <div className="p-6">
@@ -246,8 +248,8 @@ export default function CitationGenerator() {
   return (
     <>
       <ToolLayout
-        title="Citation Generator"
-        description="Generate citations in APA, MLA, Chicago, and Harvard"
+        title={t('tools.citation.name')}
+        description={t('tools.citation.description')}
         icon="Quote"
         inputPanel={inputPanel}
         outputPanel={outputPanel}

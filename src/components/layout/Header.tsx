@@ -1,16 +1,24 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Sparkles, Sun, Moon, Menu, X } from 'lucide-react';
+import { Sparkles, Sun, Moon, Menu, X, Globe } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { useUIStore } from '@/stores/uiStore';
 import { useUser } from '@/hooks/useUser';
+import { useTranslation } from '@/hooks/useTranslation';
 import UserMenu from '@/components/auth/UserMenu';
-import { cn } from '@/lib/utils';
+import { LOCALE_LABELS, type Locale } from '@/lib/i18n/translations';
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const { theme, setTheme } = useUIStore();
+  const { theme, setTheme, locale, setLocale } = useUIStore();
   const { isAuthenticated } = useUser();
+  const { t } = useTranslation();
 
   const toggleTheme = () => {
     setTheme(theme === 'dark' ? 'light' : 'dark');
@@ -32,8 +40,28 @@ export default function Header() {
               to="/pricing"
               className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
             >
-              Pricing
+              {t('common.pricing')}
             </Link>
+
+            {/* Language Switcher */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon" aria-label="Change language">
+                  <Globe className="h-5 w-5" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                {(Object.entries(LOCALE_LABELS) as [Locale, string][]).map(([code, label]) => (
+                  <DropdownMenuItem
+                    key={code}
+                    onClick={() => setLocale(code)}
+                    className={locale === code ? 'bg-accent' : ''}
+                  >
+                    {label}
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
 
             {/* Theme Toggle */}
             <Button
@@ -55,10 +83,10 @@ export default function Header() {
             ) : (
               <div className="flex items-center gap-3">
                 <Button variant="outline" asChild>
-                  <Link to="/login">Log In</Link>
+                  <Link to="/login">{t('common.login')}</Link>
                 </Button>
                 <Button asChild>
-                  <Link to="/signup">Get Started</Link>
+                  <Link to="/signup">{t('common.signup')}</Link>
                 </Button>
               </div>
             )}
@@ -66,6 +94,26 @@ export default function Header() {
 
           {/* Mobile Menu Button */}
           <div className="flex md:hidden items-center gap-2">
+            {/* Mobile Language Switcher */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon" aria-label="Change language">
+                  <Globe className="h-5 w-5" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                {(Object.entries(LOCALE_LABELS) as [Locale, string][]).map(([code, label]) => (
+                  <DropdownMenuItem
+                    key={code}
+                    onClick={() => setLocale(code)}
+                    className={locale === code ? 'bg-accent' : ''}
+                  >
+                    {label}
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+
             <Button
               variant="ghost"
               size="icon"
@@ -102,7 +150,7 @@ export default function Header() {
                 className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
                 onClick={() => setMobileMenuOpen(false)}
               >
-                Pricing
+                {t('common.pricing')}
               </Link>
 
               {isAuthenticated ? (
@@ -112,23 +160,23 @@ export default function Header() {
                     className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
                     onClick={() => setMobileMenuOpen(false)}
                   >
-                    Dashboard
+                    {t('common.dashboard')}
                   </Link>
                   <Link
                     to="/account"
                     className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
                     onClick={() => setMobileMenuOpen(false)}
                   >
-                    Account
+                    {t('common.account')}
                   </Link>
                 </>
               ) : (
                 <div className="flex flex-col gap-2">
                   <Button variant="outline" asChild onClick={() => setMobileMenuOpen(false)}>
-                    <Link to="/login">Log In</Link>
+                    <Link to="/login">{t('common.login')}</Link>
                   </Button>
                   <Button asChild onClick={() => setMobileMenuOpen(false)}>
-                    <Link to="/signup">Get Started</Link>
+                    <Link to="/signup">{t('common.signup')}</Link>
                   </Button>
                 </div>
               )}

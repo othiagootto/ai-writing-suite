@@ -7,8 +7,10 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { resetPassword } from '@/services/auth';
 import { toast } from 'sonner';
+import { useTranslation } from '@/hooks/useTranslation';
 
 export default function ForgotPassword() {
+  const { t } = useTranslation();
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -20,10 +22,10 @@ export default function ForgotPassword() {
     try {
       await resetPassword(email);
       setSubmitted(true);
-      toast.success('Password reset email sent! Check your inbox.');
+      toast.success(t('auth.forgot.success'));
     } catch (error: any) {
       console.error('Reset password error:', error);
-      toast.error(error.message || 'Failed to send reset email. Please try again.');
+      toast.error(error.message || t('auth.forgot.error'));
     } finally {
       setLoading(false);
     }
@@ -40,11 +42,11 @@ export default function ForgotPassword() {
 
         <Card>
           <CardHeader className="space-y-1">
-            <CardTitle className="text-2xl">Reset password</CardTitle>
+            <CardTitle className="text-2xl">{t('auth.forgot.title')}</CardTitle>
             <CardDescription>
               {submitted
-                ? 'Check your email for a password reset link'
-                : 'Enter your email to receive a reset link'}
+                ? t('auth.forgot.subtitleSubmitted')
+                : t('auth.forgot.subtitle')}
             </CardDescription>
           </CardHeader>
 
@@ -53,11 +55,11 @@ export default function ForgotPassword() {
               <CardContent>
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div className="space-y-2">
-                    <Label htmlFor="email">Email</Label>
+                    <Label htmlFor="email">{t('common.email')}</Label>
                     <Input
                       id="email"
                       type="email"
-                      placeholder="name@example.com"
+                      placeholder={t('auth.login.emailPlaceholder')}
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       required
@@ -65,7 +67,7 @@ export default function ForgotPassword() {
                     />
                   </div>
                   <Button type="submit" className="w-full" disabled={loading}>
-                    {loading ? 'Sending...' : 'Send reset link'}
+                    {loading ? t('auth.forgot.submitting') : t('auth.forgot.submit')}
                   </Button>
                 </form>
               </CardContent>
@@ -73,7 +75,7 @@ export default function ForgotPassword() {
                 <Button variant="ghost" asChild className="w-full">
                   <Link to="/login">
                     <ArrowLeft className="mr-2 h-4 w-4" />
-                    Back to login
+                    {t('auth.forgot.backToLogin')}
                   </Link>
                 </Button>
               </CardFooter>
@@ -83,10 +85,10 @@ export default function ForgotPassword() {
               <CardContent className="space-y-4">
                 <div className="text-center py-4">
                   <p className="text-sm text-muted-foreground mb-4">
-                    We've sent a password reset link to <strong>{email}</strong>
+                    {t('auth.forgot.emailSent')} <strong>{email}</strong>
                   </p>
                   <p className="text-sm text-muted-foreground">
-                    Didn't receive the email? Check your spam folder or try again.
+                    {t('auth.forgot.checkSpam')}
                   </p>
                 </div>
               </CardContent>
@@ -96,12 +98,12 @@ export default function ForgotPassword() {
                   className="w-full"
                   onClick={() => setSubmitted(false)}
                 >
-                  Try different email
+                  {t('auth.forgot.tryDifferent')}
                 </Button>
                 <Button variant="ghost" asChild className="w-full">
                   <Link to="/login">
                     <ArrowLeft className="mr-2 h-4 w-4" />
-                    Back to login
+                    {t('auth.forgot.backToLogin')}
                   </Link>
                 </Button>
               </CardFooter>

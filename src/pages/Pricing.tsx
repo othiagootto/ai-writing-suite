@@ -5,45 +5,59 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Badge } from '@/components/ui/badge';
 import { PRICING_PLANS } from '@/lib/constants';
 import { cn } from '@/lib/utils';
-
-const faqs = [
-  {
-    question: 'Can I try before I buy?',
-    answer: 'Yes! All plans include a 7-day free trial. No credit card required for the free plan.',
-  },
-  {
-    question: 'Can I cancel anytime?',
-    answer: 'Absolutely. Cancel your subscription at any time with no questions asked.',
-  },
-  {
-    question: 'What payment methods do you accept?',
-    answer: 'We accept all major credit cards, debit cards, and PayPal through our secure Stripe integration.',
-  },
-  {
-    question: 'Do you offer refunds?',
-    answer: 'Yes, we offer a 30-day money-back guarantee on all paid plans.',
-  },
-  {
-    question: 'What happens when I reach my limit on the free plan?',
-    answer: "You'll need to wait until the next day or upgrade to Pro for unlimited access.",
-  },
-  {
-    question: 'Can I upgrade or downgrade my plan?',
-    answer: 'Yes, you can change your plan at any time. Changes take effect immediately.',
-  },
-];
+import { useTranslation } from '@/hooks/useTranslation';
 
 export default function PricingPage() {
+  const { t } = useTranslation();
+
+  const getPlanFeatures = (planId: string): string[] => {
+    const prefix = `plan.${planId}`;
+    const features: string[] = [];
+    for (let i = 1; i <= 6; i++) {
+      const key = `${prefix}.feature${i}`;
+      const val = t(key);
+      if (val !== key) features.push(val);
+    }
+    return features;
+  };
+
+  const faqs = [
+    {
+      question: t('pricing.faq.q1'),
+      answer: t('pricing.faq.a1'),
+    },
+    {
+      question: t('pricing.faq.q2'),
+      answer: t('pricing.faq.a2'),
+    },
+    {
+      question: t('pricing.faq.q3'),
+      answer: t('pricing.faq.a3'),
+    },
+    {
+      question: t('pricing.faq.q4'),
+      answer: t('pricing.faq.a4'),
+    },
+    {
+      question: t('pricing.faq.q5'),
+      answer: t('pricing.faq.a5'),
+    },
+    {
+      question: t('pricing.faq.q6'),
+      answer: t('pricing.faq.a6'),
+    },
+  ];
+
   return (
     <div className="min-h-screen">
       {/* Hero */}
       <section className="container mx-auto px-4 py-20">
         <div className="max-w-3xl mx-auto text-center space-y-4">
           <h1 className="text-4xl md:text-5xl font-heading font-bold">
-            Simple, Transparent Pricing
+            {t('pricing.title')}
           </h1>
           <p className="text-xl text-muted-foreground">
-            Choose the plan that works best for you. No hidden fees.
+            {t('pricing.subtitle')}
           </p>
         </div>
       </section>
@@ -62,25 +76,25 @@ export default function PricingPage() {
               >
                 {plan.popular && (
                   <Badge className="absolute -top-3 left-1/2 -translate-x-1/2">
-                    Most Popular
+                    {t('common.mostPopular')}
                   </Badge>
                 )}
                 <CardHeader>
-                  <CardTitle className="text-2xl">{plan.name}</CardTitle>
-                  <CardDescription>{plan.description}</CardDescription>
+                  <CardTitle className="text-2xl">{t(`plan.${plan.id}.name`)}</CardTitle>
+                  <CardDescription>{t(`plan.${plan.id}.description`)}</CardDescription>
                   <div className="mt-6">
                     <span className="text-5xl font-bold">${plan.price}</span>
                     <span className="text-lg text-muted-foreground">{plan.period}</span>
                     {plan.annualPrice && (
                       <div className="text-sm text-muted-foreground mt-2">
-                        ${plan.annualPrice} billed annually
+                        {t('pricing.billedAnnually', { amount: plan.annualPrice })}
                       </div>
                     )}
                   </div>
                 </CardHeader>
                 <CardContent className="flex-1">
                   <ul className="space-y-3">
-                    {plan.features.map((feature, idx) => (
+                    {getPlanFeatures(plan.id).map((feature, idx) => (
                       <li key={idx} className="flex items-start gap-3">
                         <Check className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
                         <span className="text-sm">{feature}</span>
@@ -96,7 +110,7 @@ export default function PricingPage() {
                     asChild
                   >
                     <Link to={plan.id === 'free' ? '/signup' : '/signup'}>
-                      {plan.cta}
+                      {t(`plan.${plan.id}.cta`)}
                     </Link>
                   </Button>
                 </CardFooter>
@@ -111,10 +125,10 @@ export default function PricingPage() {
         <div className="max-w-3xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-heading font-bold mb-4">
-              Frequently Asked Questions
+              {t('pricing.faq.title')}
             </h2>
             <p className="text-muted-foreground">
-              Everything you need to know about our pricing
+              {t('pricing.faq.subtitle')}
             </p>
           </div>
 
@@ -140,13 +154,13 @@ export default function PricingPage() {
       <section className="container mx-auto px-4 py-20">
         <div className="max-w-3xl mx-auto text-center space-y-6">
           <h2 className="text-3xl font-heading font-bold">
-            Still have questions?
+            {t('pricing.stillHaveQuestions')}
           </h2>
           <p className="text-lg text-muted-foreground">
-            Contact our support team and we'll be happy to help
+            {t('pricing.contactSupport')}
           </p>
           <Button size="lg" asChild>
-            <Link to="/signup">Get Started Free</Link>
+            <Link to="/signup">{t('common.getStartedFree')}</Link>
           </Button>
         </div>
       </section>

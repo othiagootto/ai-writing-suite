@@ -7,8 +7,10 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { signIn } from '@/services/auth';
 import { toast } from 'sonner';
+import { useTranslation } from '@/hooks/useTranslation';
 
 export default function Login() {
+  const { t } = useTranslation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -20,11 +22,11 @@ export default function Login() {
 
     try {
       await signIn(email, password);
-      toast.success('Welcome back!');
+      toast.success(t('auth.login.welcomeBack'));
       navigate('/dashboard');
     } catch (error) {
       console.error('Login error:', error);
-      toast.error('Invalid email or password');
+      toast.error(t('auth.login.invalidCredentials'));
     } finally {
       setLoading(false);
     }
@@ -41,19 +43,19 @@ export default function Login() {
 
         <Card>
           <CardHeader className="space-y-1">
-            <CardTitle className="text-2xl">Log in</CardTitle>
+            <CardTitle className="text-2xl">{t('auth.login.title')}</CardTitle>
             <CardDescription>
-              Enter your credentials to access your account
+              {t('auth.login.subtitle')}
             </CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="email">{t('common.email')}</Label>
                 <Input
                   id="email"
                   type="email"
-                  placeholder="name@example.com"
+                  placeholder={t('auth.login.emailPlaceholder')}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
@@ -62,12 +64,12 @@ export default function Login() {
               </div>
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <Label htmlFor="password">Password</Label>
+                  <Label htmlFor="password">{t('common.password')}</Label>
                   <Link
                     to="/forgot-password"
                     className="text-sm text-muted-foreground hover:text-foreground transition-colors"
                   >
-                    Forgot password?
+                    {t('auth.login.forgotPassword')}
                   </Link>
                 </div>
                 <Input
@@ -80,15 +82,15 @@ export default function Login() {
                 />
               </div>
               <Button type="submit" className="w-full" disabled={loading}>
-                {loading ? 'Logging in...' : 'Log in'}
+                {loading ? t('auth.login.submitting') : t('auth.login.submit')}
               </Button>
             </form>
           </CardContent>
           <CardFooter className="flex flex-col space-y-4">
             <div className="text-sm text-muted-foreground text-center">
-              Don't have an account?{' '}
+              {t('auth.login.noAccount')}{' '}
               <Link to="/signup" className="text-foreground hover:underline font-medium">
-                Sign up
+                {t('auth.login.signupLink')}
               </Link>
             </div>
           </CardFooter>

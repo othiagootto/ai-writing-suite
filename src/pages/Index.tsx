@@ -4,33 +4,47 @@ import * as LucideIcons from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { TOOLS, PRICING_PLANS } from '@/lib/constants';
+import { TOOLS, PRICING_PLANS, FREE_DAILY_LIMIT } from '@/lib/constants';
 import { cn } from '@/lib/utils';
+import { useTranslation } from '@/hooks/useTranslation';
 
 export default function Index() {
+  const { t } = useTranslation();
+
+  const getPlanFeatures = (planId: string): string[] => {
+    const prefix = `plan.${planId}`;
+    const features: string[] = [];
+    for (let i = 1; i <= 6; i++) {
+      const key = `${prefix}.feature${i}`;
+      const val = t(key);
+      if (val !== key) features.push(val);
+    }
+    return features;
+  };
+
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
       <section className="container mx-auto px-4 py-20 md:py-32">
         <div className="max-w-4xl mx-auto text-center space-y-8">
           <Badge variant="outline" className="mb-4">
-            AI-Powered Writing Suite
+            {t('landing.badge')}
           </Badge>
           <h1 className="text-4xl md:text-6xl font-heading font-bold tracking-tight">
-            Write Better. Faster. Smarter.
+            {t('landing.headline')}
           </h1>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            8 powerful AI tools in one platform. Detect AI content, humanize text, check grammar, and more.
+            {t('landing.subheadline')}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4">
             <Button size="lg" asChild>
               <Link to="/signup">
-                Start Free
+                {t('common.startFree')}
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Link>
             </Button>
             <Button size="lg" variant="outline" asChild>
-              <Link to="/pricing">See Pricing</Link>
+              <Link to="/pricing">{t('common.seePricing')}</Link>
             </Button>
           </div>
 
@@ -38,15 +52,15 @@ export default function Index() {
           <div className="grid grid-cols-3 gap-8 pt-12 max-w-2xl mx-auto">
             <div className="space-y-2">
               <div className="text-3xl font-bold">8</div>
-              <div className="text-sm text-muted-foreground">Tools</div>
+              <div className="text-sm text-muted-foreground">{t('landing.stats.tools')}</div>
             </div>
             <div className="space-y-2">
               <div className="text-3xl font-bold">10K+</div>
-              <div className="text-sm text-muted-foreground">Users</div>
+              <div className="text-sm text-muted-foreground">{t('landing.stats.users')}</div>
             </div>
             <div className="space-y-2">
               <div className="text-3xl font-bold">99.9%</div>
-              <div className="text-sm text-muted-foreground">Uptime</div>
+              <div className="text-sm text-muted-foreground">{t('landing.stats.uptime')}</div>
             </div>
           </div>
         </div>
@@ -57,10 +71,10 @@ export default function Index() {
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-heading font-bold mb-4">
-              8 Powerful AI Writing Tools
+              {t('landing.features.title')}
             </h2>
             <p className="text-lg text-muted-foreground">
-              Everything you need to create, polish, and perfect your writing
+              {t('landing.features.subtitle')}
             </p>
           </div>
 
@@ -73,13 +87,13 @@ export default function Index() {
                     <div className={cn('mb-2', tool.color)}>
                       <Icon className="h-8 w-8" />
                     </div>
-                    <CardTitle className="text-lg">{tool.name}</CardTitle>
-                    <CardDescription>{tool.description}</CardDescription>
+                    <CardTitle className="text-lg">{t(tool.nameKey)}</CardTitle>
+                    <CardDescription>{t(tool.descriptionKey)}</CardDescription>
                   </CardHeader>
                   <CardFooter>
                     <Button variant="ghost" size="sm" asChild>
                       <Link to={tool.path}>
-                        Try it free
+                        {t('landing.features.tryFree')}
                         <ArrowRight className="ml-2 h-4 w-4" />
                       </Link>
                     </Button>
@@ -96,10 +110,10 @@ export default function Index() {
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-heading font-bold mb-4">
-              How It Works
+              {t('landing.howItWorks.title')}
             </h2>
             <p className="text-lg text-muted-foreground">
-              Get professional results in three simple steps
+              {t('landing.howItWorks.subtitle')}
             </p>
           </div>
 
@@ -108,27 +122,27 @@ export default function Index() {
               <div className="w-16 h-16 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-2xl font-bold mx-auto">
                 1
               </div>
-              <h3 className="text-xl font-semibold">Paste Your Text</h3>
+              <h3 className="text-xl font-semibold">{t('landing.howItWorks.step1.title')}</h3>
               <p className="text-muted-foreground">
-                Copy and paste your content or upload a document
+                {t('landing.howItWorks.step1.description')}
               </p>
             </div>
             <div className="text-center space-y-4">
               <div className="w-16 h-16 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-2xl font-bold mx-auto">
                 2
               </div>
-              <h3 className="text-xl font-semibold">Choose a Tool</h3>
+              <h3 className="text-xl font-semibold">{t('landing.howItWorks.step2.title')}</h3>
               <p className="text-muted-foreground">
-                Select from 8 AI-powered writing tools
+                {t('landing.howItWorks.step2.description')}
               </p>
             </div>
             <div className="text-center space-y-4">
               <div className="w-16 h-16 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-2xl font-bold mx-auto">
                 3
               </div>
-              <h3 className="text-xl font-semibold">Get Results in Seconds</h3>
+              <h3 className="text-xl font-semibold">{t('landing.howItWorks.step3.title')}</h3>
               <p className="text-muted-foreground">
-                Receive instant AI-powered analysis and improvements
+                {t('landing.howItWorks.step3.description')}
               </p>
             </div>
           </div>
@@ -140,10 +154,10 @@ export default function Index() {
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-heading font-bold mb-4">
-              Simple, Transparent Pricing
+              {t('landing.pricing.title')}
             </h2>
             <p className="text-lg text-muted-foreground">
-              Choose the plan that works best for you
+              {t('landing.pricing.subtitle')}
             </p>
           </div>
 
@@ -155,25 +169,25 @@ export default function Index() {
               )}>
                 {plan.popular && (
                   <Badge className="absolute -top-3 left-1/2 -translate-x-1/2">
-                    Popular
+                    {t('common.popular')}
                   </Badge>
                 )}
                 <CardHeader>
-                  <CardTitle>{plan.name}</CardTitle>
-                  <CardDescription>{plan.description}</CardDescription>
+                  <CardTitle>{t(`plan.${plan.id}.name`)}</CardTitle>
+                  <CardDescription>{t(`plan.${plan.id}.description`)}</CardDescription>
                   <div className="mt-4">
                     <span className="text-4xl font-bold">${plan.price}</span>
                     <span className="text-muted-foreground">{plan.period}</span>
                     {plan.annualPrice && (
                       <div className="text-sm text-muted-foreground mt-1">
-                        Billed ${plan.annualPrice} annually
+                        {t('landing.pricing.billedAnnually', { amount: plan.annualPrice })}
                       </div>
                     )}
                   </div>
                 </CardHeader>
                 <CardContent>
                   <ul className="space-y-3">
-                    {plan.features.map((feature, idx) => (
+                    {getPlanFeatures(plan.id).map((feature, idx) => (
                       <li key={idx} className="flex items-start gap-2">
                         <Check className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
                         <span className="text-sm">{feature}</span>
@@ -188,7 +202,7 @@ export default function Index() {
                     asChild
                   >
                     <Link to={plan.id === 'free' ? '/signup' : '/signup'}>
-                      {plan.cta}
+                      {t(`plan.${plan.id}.cta`)}
                     </Link>
                   </Button>
                 </CardFooter>
@@ -203,10 +217,10 @@ export default function Index() {
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-heading font-bold mb-4">
-              Loved by Writers Everywhere
+              {t('landing.testimonials.title')}
             </h2>
             <p className="text-lg text-muted-foreground">
-              See what our users have to say
+              {t('landing.testimonials.subtitle')}
             </p>
           </div>
 
@@ -218,14 +232,14 @@ export default function Index() {
                     SK
                   </div>
                   <div>
-                    <div className="font-semibold">Sarah Kim</div>
-                    <div className="text-sm text-muted-foreground">Content Writer</div>
+                    <div className="font-semibold">{t('landing.testimonials.testimonial1.name')}</div>
+                    <div className="text-sm text-muted-foreground">{t('landing.testimonials.testimonial1.role')}</div>
                   </div>
                 </div>
               </CardHeader>
               <CardContent>
                 <p className="text-muted-foreground">
-                  "WriteAI has transformed my writing workflow. The AI detector and humanizer are game-changers for my content strategy."
+                  {t('landing.testimonials.testimonial1.quote')}
                 </p>
               </CardContent>
             </Card>
@@ -237,14 +251,14 @@ export default function Index() {
                     MR
                   </div>
                   <div>
-                    <div className="font-semibold">Michael Rodriguez</div>
-                    <div className="text-sm text-muted-foreground">Graduate Student</div>
+                    <div className="font-semibold">{t('landing.testimonials.testimonial2.name')}</div>
+                    <div className="text-sm text-muted-foreground">{t('landing.testimonials.testimonial2.role')}</div>
                   </div>
                 </div>
               </CardHeader>
               <CardContent>
                 <p className="text-muted-foreground">
-                  "The citation generator and grammar checker save me hours every week. Essential tools for academic writing."
+                  {t('landing.testimonials.testimonial2.quote')}
                 </p>
               </CardContent>
             </Card>
@@ -256,14 +270,14 @@ export default function Index() {
                     EP
                   </div>
                   <div>
-                    <div className="font-semibold">Emily Patterson</div>
-                    <div className="text-sm text-muted-foreground">Marketing Manager</div>
+                    <div className="font-semibold">{t('landing.testimonials.testimonial3.name')}</div>
+                    <div className="text-sm text-muted-foreground">{t('landing.testimonials.testimonial3.role')}</div>
                   </div>
                 </div>
               </CardHeader>
               <CardContent>
                 <p className="text-muted-foreground">
-                  "All the writing tools I need in one place. The plagiarism checker gives me peace of mind for all our content."
+                  {t('landing.testimonials.testimonial3.quote')}
                 </p>
               </CardContent>
             </Card>
@@ -276,14 +290,14 @@ export default function Index() {
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center space-y-6">
             <h2 className="text-3xl md:text-5xl font-heading font-bold">
-              Ready to Transform Your Writing?
+              {t('landing.cta.title')}
             </h2>
             <p className="text-lg opacity-90">
-              Join thousands of writers using AI to create better content faster
+              {t('landing.cta.subtitle')}
             </p>
             <Button size="lg" variant="secondary" asChild>
               <Link to="/signup">
-                Get Started Free
+                {t('common.getStartedFree')}
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Link>
             </Button>

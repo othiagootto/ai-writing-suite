@@ -8,12 +8,14 @@ import LoadingSpinner from '@/components/shared/LoadingSpinner';
 import UsageBadge from '@/components/shared/UsageBadge';
 import UpgradeModal from '@/components/shared/UpgradeModal';
 import { useTool } from '@/hooks/useTool';
+import { useTranslation } from '@/hooks/useTranslation';
 import { MAX_INPUT_CHARS } from '@/lib/constants';
 import { AlertCircle, CheckCircle2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 
 export default function GrammarChecker() {
+  const { t } = useTranslation();
   const [text, setText] = useState('');
   const [showUpgrade, setShowUpgrade] = useState(false);
   const { result, isLoading, error, execute, canUse, remaining } = useTool('grammar');
@@ -26,7 +28,7 @@ export default function GrammarChecker() {
 
   const handleCheck = async () => {
     if (!text.trim()) {
-      toast.error('Please enter some text to check');
+      toast.error(t('grammar.enterText'));
       return;
     }
 
@@ -44,7 +46,7 @@ export default function GrammarChecker() {
       <TextInput
         value={text}
         onChange={setText}
-        placeholder="Paste or type your text here to check for grammar and spelling errors..."
+        placeholder={t('grammar.placeholder')}
         maxLength={MAX_INPUT_CHARS}
       />
       <Button
@@ -53,7 +55,7 @@ export default function GrammarChecker() {
         className="w-full bg-primary hover:bg-primary/90"
         size="lg"
       >
-        Check Grammar
+        {t('grammar.submit')}
       </Button>
     </div>
   );
@@ -64,7 +66,7 @@ export default function GrammarChecker() {
         <div className="rounded-lg border border-border bg-card p-6">
           <LoadingSpinner />
           <p className="text-center text-sm text-muted-foreground mt-4">
-            Checking grammar and spelling...
+            {t('grammar.checking')}
           </p>
         </div>
       )}
@@ -74,7 +76,7 @@ export default function GrammarChecker() {
           <div className="flex items-start gap-3">
             <AlertCircle className="h-5 w-5 text-destructive mt-0.5 flex-shrink-0" />
             <div className="flex-1">
-              <h3 className="font-semibold text-destructive mb-1">Error</h3>
+              <h3 className="font-semibold text-destructive mb-1">{t('common.error')}</h3>
               <p className="text-sm text-destructive">{error}</p>
             </div>
           </div>
@@ -84,7 +86,7 @@ export default function GrammarChecker() {
       {!isLoading && !error && !result && (
         <div className="rounded-lg border border-border bg-muted p-12">
           <div className="text-center text-muted-foreground">
-            <p className="text-sm">Check results will appear here</p>
+            <p className="text-sm">{t('grammar.emptyResult')}</p>
           </div>
         </div>
       )}
@@ -94,7 +96,7 @@ export default function GrammarChecker() {
           {result.score !== undefined && (
             <ScoreDisplay
               score={result.score}
-              label="Writing Quality Score"
+              label={t('grammar.scoreLabel')}
               type="quality"
             />
           )}
@@ -102,7 +104,7 @@ export default function GrammarChecker() {
           <div className="rounded-lg border border-border bg-card p-6">
             <h3 className="font-semibold mb-3 flex items-center gap-2">
               <CheckCircle2 className="h-5 w-5 text-green-600" />
-              Corrected Text
+              {t('grammar.correctedText')}
             </h3>
             <p className="text-foreground leading-relaxed whitespace-pre-wrap">
               {result.result}
@@ -112,7 +114,7 @@ export default function GrammarChecker() {
           {result.corrections && result.corrections.length > 0 && (
             <div className="rounded-lg border border-border bg-card p-6">
               <h3 className="font-semibold mb-4">
-                Corrections ({result.corrections.length})
+                {t('grammar.corrections')} ({result.corrections.length})
               </h3>
               <div className="space-y-4">
                 {result.corrections.map((correction, idx) => (
@@ -152,7 +154,7 @@ export default function GrammarChecker() {
               <div className="flex items-center gap-3">
                 <CheckCircle2 className="h-5 w-5 text-green-600 dark:text-green-400" />
                 <p className="text-green-700 dark:text-green-400 font-medium">
-                  Great! No grammar or spelling errors found.
+                  {t('grammar.noErrors')}
                 </p>
               </div>
             </div>
@@ -165,8 +167,8 @@ export default function GrammarChecker() {
   return (
     <>
       <ToolLayout
-        title="Grammar Checker"
-        description="Find and fix grammar, spelling, and style errors"
+        title={t('tools.grammar.name')}
+        description={t('tools.grammar.description')}
         icon="SpellCheck"
         inputPanel={inputPanel}
         outputPanel={outputPanel}

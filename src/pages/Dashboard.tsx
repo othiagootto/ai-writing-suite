@@ -7,8 +7,10 @@ import { TOOLS } from '@/lib/constants';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/services/supabase';
 import { useUser } from '@/hooks/useUser';
+import { useTranslation } from '@/hooks/useTranslation';
 
 export default function Dashboard() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { user } = useUser();
 
@@ -35,20 +37,20 @@ export default function Dashboard() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-foreground mb-2">Dashboard</h1>
-          <p className="text-muted-foreground">Choose a tool to get started</p>
+          <h1 className="text-3xl font-bold text-foreground mb-2">{t('dashboard.title')}</h1>
+          <p className="text-muted-foreground">{t('dashboard.subtitle')}</p>
         </div>
 
         {/* Stats */}
         <div className="mb-8">
           <Card>
             <CardHeader>
-              <CardTitle className="text-lg">Today's Activity</CardTitle>
-              <CardDescription>Your usage across all tools</CardDescription>
+              <CardTitle className="text-lg">{t('dashboard.todayActivity')}</CardTitle>
+              <CardDescription>{t('dashboard.usageAcrossTools')}</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="text-3xl font-bold">{todayUsage}</div>
-              <p className="text-sm text-muted-foreground mt-1">tools used today</p>
+              <p className="text-sm text-muted-foreground mt-1">{t('dashboard.toolsUsedToday')}</p>
             </CardContent>
           </Card>
         </div>
@@ -71,13 +73,13 @@ export default function Dashboard() {
                     </div>
                     {tool.active && (
                       <Badge variant="outline" className="text-xs">
-                        Active
+                        {t('common.active')}
                       </Badge>
                     )}
                   </div>
-                  <CardTitle className="text-lg">{tool.name}</CardTitle>
+                  <CardTitle className="text-lg">{t(tool.nameKey)}</CardTitle>
                   <CardDescription className="text-sm">
-                    {tool.description}
+                    {t(tool.descriptionKey)}
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -85,7 +87,7 @@ export default function Dashboard() {
                     variant="outline"
                     className="w-full group-hover:bg-primary group-hover:text-primary-foreground group-hover:border-primary transition-colors"
                   >
-                    Open Tool
+                    {t('common.openTool')}
                   </Button>
                 </CardContent>
               </Card>

@@ -1,6 +1,7 @@
 import { LucideIcon } from 'lucide-react';
 import * as Icons from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useTranslation } from '@/hooks/useTranslation';
 
 interface ToolLayoutProps {
   title: string;
@@ -19,6 +20,8 @@ export default function ToolLayout({
   outputPanel,
   className,
 }: ToolLayoutProps) {
+  const { t } = useTranslation();
+
   // Resolve icon if it's a string
   const IconComponent = typeof icon === 'string'
     ? (Icons[icon as keyof typeof Icons] as LucideIcon)
@@ -50,13 +53,13 @@ export default function ToolLayout({
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Input Panel */}
           <div className="space-y-6">
-            <h2 className="text-lg font-semibold text-foreground">Input</h2>
+            <h2 className="text-lg font-semibold text-foreground">{t('common.input')}</h2>
             {inputPanel}
           </div>
 
           {/* Output Panel */}
           <div className="space-y-6">
-            <h2 className="text-lg font-semibold text-foreground">Output</h2>
+            <h2 className="text-lg font-semibold text-foreground">{t('common.output')}</h2>
             {outputPanel}
           </div>
         </div>
