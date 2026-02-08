@@ -24,10 +24,7 @@ export default function Signup() {
     try {
       await signUp(email, password, name);
       toast.success(t('auth.signup.success'));
-      // Navigate to login after a short delay
-      setTimeout(() => {
-        navigate('/login');
-      }, 2000);
+      navigate('/dashboard');
     } catch (error: any) {
       console.error('Signup error:', error);
       toast.error(error.message || t('auth.signup.error'));

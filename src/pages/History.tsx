@@ -85,7 +85,7 @@ export default function History() {
                                 {t('history.input')}
                               </h4>
                               <p className="text-sm text-muted-foreground line-clamp-2">
-                                {entry.input || t('history.noInput')}
+                                {entry.input_text || t('history.noInput')}
                               </p>
                             </div>
 
@@ -94,7 +94,7 @@ export default function History() {
                                 {t('history.output')}
                               </h4>
                               <p className="text-sm text-muted-foreground line-clamp-2">
-                                {entry.output || t('history.noOutput')}
+                                {entry.output_text || t('history.noOutput')}
                               </p>
                             </div>
                           </div>
